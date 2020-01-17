@@ -20,7 +20,7 @@ RUN curl -L -S \
     && rm -rf /tmp/hadoop-${HADOOP_VERSION}.tar.gz
 
 # Configuration Changes
-RUN sed -i 's/# export JAVA_HOME=/export JAVA_HOME=${JAVA_HOME}/g' /home/hadoop/etc/hadoop/hadoop-env.sh
+RUN sed -i 's/# export JAVA_HOME=/export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/g' /home/hadoop/etc/hadoop/hadoop-env.sh
 COPY etc/hadoop/*.xml /home/hadoop/etc/hadoop/
 COPY run.sh /home/hadoop/run.sh
 
