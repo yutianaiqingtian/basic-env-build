@@ -1,5 +1,7 @@
 #!/bin/bash
 
+chown -R hadoop:hadoop /home/hadoop
+
 service ssh start && su hadoop
 
 # Configure SSH
