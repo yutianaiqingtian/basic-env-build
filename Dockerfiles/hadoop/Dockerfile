@@ -22,6 +22,7 @@ RUN curl -L -S \
 # Configuration Changes
 RUN sed -i 's/# export JAVA_HOME=/export JAVA_HOME=${JAVA_HOME}/g' /home/hadoop/etc/hadoop/hadoop-env.sh
 COPY etc/hadoop/*.xml /home/hadoop/etc/hadoop/
+COPY run.sh /home/hadoop/run.sh
 
 # Access Hadoop web interface by connecting to
 # Resource Manager: http://localhost:9870
