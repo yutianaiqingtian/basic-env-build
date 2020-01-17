@@ -6,12 +6,13 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 
 # install ssh client and server
-RUN softwares='curl openssh-server openssh-client openjdk-8-jdk' \
+RUN softwares='curl openjdk-8-jdk openssh-client openssh-server' \
     && apt-get update && apt-get install -y $softwares \
     && rm -rf /var/lib/apt/lists/* 
 
 # start sshd service
-RUN /usr/sbin/sshd
+# RUN mkdir /var/run/sshd && echo 'root:root' | chpasswd && /usr/sbin/sshd
+RUN service ssh start
 
 # create a hadoop user and add to hadoop usergroup
 RUN useradd -r -m -U hadoop
@@ -25,6 +26,7 @@ RUN curl -L -S \
     && rm -rf /tmp/hadoop-${HADOOP_VERSION}.tar.gz
 
 # Configuration Changes
+RUN sed -i 's/# export JAVA_HOME=/export JAVA_HOME=${JAVA_HOME}/g' ~/etc/hadoop/hadoop-env.sh
 COPY etc/hadoop/*.xml ~/etc/hadoop/
 
 # Configure SSH
