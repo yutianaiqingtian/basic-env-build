@@ -22,7 +22,7 @@ RUN curl -L -S \
 # Configuration Changes
 RUN sed -i 's/# export JAVA_HOME=/export JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-amd64/g' /home/hadoop/etc/hadoop/hadoop-env.sh
 COPY etc/hadoop/*.xml /home/hadoop/etc/hadoop/
-COPY run.sh /home/hadoop/run.sh
+COPY --chown=hadoop:hadoop start.sh /home/hadoop/start.sh
 
 # Access Hadoop web interface by connecting to
 # Resource Manager: http://localhost:9870
@@ -30,4 +30,4 @@ COPY run.sh /home/hadoop/run.sh
 # Node Specific Info: http://localhost:8042/
 EXPOSE 9870 8088 8042
 
-CMD /home/hadoop/run.sh
+CMD /home/hadoop/start.sh
