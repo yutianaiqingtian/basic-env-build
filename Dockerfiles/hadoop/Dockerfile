@@ -10,21 +10,23 @@ RUN softwares='curl openjdk-8-jdk openssh-client openssh-server' \
     && apt-get update && apt-get install -y $softwares \
     && rm -rf /var/lib/apt/lists/* 
 
+RUN useradd -r -m -U hadoop
+
 # Install Hadoop
 RUN curl -L -S \
     http://mirror-hk.koddos.net/apache/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz \
     -o /tmp/hadoop-${HADOOP_VERSION}.tar.gz \
-    && tar xzf /tmp/hadoop-${HADOOP_VERSION}.tar.gz --strip-components 1 -C ~/ \
+    && tar xzf /tmp/hadoop-${HADOOP_VERSION}.tar.gz --strip-components 1 -C /home/hadoop \
     && rm -rf /tmp/hadoop-${HADOOP_VERSION}.tar.gz
 
 # Configuration Changes
-RUN sed -i 's/# export JAVA_HOME=/export JAVA_HOME=${JAVA_HOME}/g' ~/etc/hadoop/hadoop-env.sh
-COPY etc/hadoop/*.xml ~/etc/hadoop/
-COPY run.sh ~/
+RUN sed -i 's/# export JAVA_HOME=/export JAVA_HOME=${JAVA_HOME}/g' /home/hadoop/etc/hadoop/hadoop-env.sh
+COPY etc/hadoop/*.xml /home/hadoop/etc/hadoop/
+
 # Access Hadoop web interface by connecting to
 # Resource Manager: http://localhost:9870
 # JobTracker: http://localhost:8088/
 # Node Specific Info: http://localhost:8042/
 EXPOSE 9870 8088 8042
 
-CMD [ "~/run.sh" ]
+CMD /home/hadoop/run.sh

@@ -1,11 +1,5 @@
 #!/bin/sh
 
-if [ ! -e /home/hadoop ] 
-then
-    # create a hadoop user and add to hadoop usergroup
-    useradd -r -m -U hadoop
-fi
-
 service sshd start && su hadoop
 
 # Configure SSH
