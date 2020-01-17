@@ -2,13 +2,16 @@ FROM ubuntu:18.04
 
 ARG HADOOP_VERSION=3.2.1
 
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV PATH $JAVA_HOME/bin:$PATH
+
 # install ssh client and server
 RUN softwares='curl openssh-server openssh-client openjdk-8-jdk' \
     && apt-get update && apt-get install -y $softwares \
     && rm -rf /var/lib/apt/lists/* 
 
 # start sshd service
-RUN /etc/init.d/ssh start
+RUN /usr/sbin/sshd
 
 # create a hadoop user and add to hadoop usergroup
 RUN useradd -r -m -U hadoop
