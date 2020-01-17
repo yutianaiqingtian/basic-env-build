@@ -2,14 +2,12 @@
 
 chown -R hadoop:hadoop /home/hadoop
 
-service ssh start && su hadoop
-
-# Configure SSH
-ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
-&& cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys \
-&& chmod 0600 ~/.ssh/authorized_keys
+service ssh start && su hadoop \
+&& ssh-keygen -t rsa -P '' -f /home/hadoop/.ssh/id_rsa \
+&& cat /home/hadoop/.ssh/id_rsa.pub > /home/hadoop/.ssh/authorized_keys \
+&& chmod 0600 /home/hadoop/.ssh/authorized_keys
 
 # Format HDFS
-~/bin/hdfs namenode -format
+/home/hadoop/bin/hdfs namenode -format
 
-~/sbin/start-all.sh
+/home/hadoop/sbin/start-all.sh
