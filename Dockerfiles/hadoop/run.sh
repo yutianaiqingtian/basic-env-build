@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-service sshd start && su hadoop
+service ssh start && su hadoop
 
 # Configure SSH
 ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
