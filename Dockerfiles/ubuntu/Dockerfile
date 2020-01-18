@@ -11,4 +11,4 @@ RUN cp /etc/apt/sources.list /etc/apt/sources.list.bak \
     && sed -i '12,$d' /etc/apt/sources.list \
     && sed -r 's/^deb http:\/\/archive\.ubuntu\.com\/ubuntu(.*)/deb http:\/\/mirrors.163.com\/ubuntu\1/g' /etc/apt/sources.list > /etc/apt/sources.list.tmp \
     && mv /etc/apt/sources.list.tmp /etc/apt/sources.list \
-    apt-get update
+    && apt-get update
