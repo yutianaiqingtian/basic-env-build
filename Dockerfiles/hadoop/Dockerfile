@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM 5200710/ubuntu:18.04-163
 
 ARG HADOOP_VERSION=3.2.1
 
@@ -22,7 +22,12 @@ RUN curl -L -S \
 # Configuration Changes
 RUN sed -i 's/# export JAVA_HOME=/export JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-amd64/g' /home/hadoop/etc/hadoop/hadoop-env.sh
 COPY etc/hadoop/*.xml /home/hadoop/etc/hadoop/
-COPY start.sh /home/hadoop/start.sh
+
+RUN chown -R hadoop:hadoop /home/hadoop && su - hadoop -c '/home/hadoop/bin/hdfs namenode -format'
+
+RUN su - hadoop -c '/usr/bin/ssh-keygen -t rsa -P "" -f /home/hadoop/.ssh/id_rsa'
+RUN su - hadoop -c 'cat /home/hadoop/.ssh/id_rsa.pub > /home/hadoop/.ssh/authorized_keys'
+RUN chmod 0600 /home/hadoop/.ssh/authorized_keys
 
 # Access Hadoop web interface by connecting to
 # Resource Manager: http://localhost:9870
@@ -30,4 +35,4 @@ COPY start.sh /home/hadoop/start.sh
 # Node Specific Info: http://localhost:8042/
 EXPOSE 9870 8088 8042
 
-CMD /home/hadoop/start.sh
+CMD service ssh start && su - hadoop -c '/home/hadoop/sbin/start-all.sh' && tail -f /home/hadoop/logs/*
