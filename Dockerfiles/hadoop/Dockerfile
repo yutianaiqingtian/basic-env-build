@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM 5200710/ubuntu:18.04-163
 
 ARG HADOOP_VERSION=3.2.1
 
@@ -25,9 +25,7 @@ COPY etc/hadoop/*.xml /home/hadoop/etc/hadoop/
 
 RUN chown -R hadoop:hadoop /home/hadoop && su - hadoop -c '/home/hadoop/bin/hdfs namenode -format'
 
-RUN su - hadoop -c '/usr/bin/ssh-keygen -t rsa -P "" -f /home/hadoop/.ssh/id_rsa'
-RUN su - hadoop -c 'cat /home/hadoop/.ssh/id_rsa.pub > /home/hadoop/.ssh/authorized_keys'
-RUN chmod 0600 /home/hadoop/.ssh/authorized_keys
+COPY entrypoint.sh /entrypoint.sh
 
 # Access Hadoop web interface by connecting to
 # Resource Manager: http://localhost:9870
@@ -35,4 +33,6 @@ RUN chmod 0600 /home/hadoop/.ssh/authorized_keys
 # Node Specific Info: http://localhost:8042/
 EXPOSE 9870 8088 8042
 
-CMD service ssh start && su - hadoop -c '/home/hadoop/sbin/start-all.sh' && tail -f /home/hadoop/logs/*
+ENTRYPOINT [ "/entrypoint.sh" ]
+
+CMD [ "-d" ]
