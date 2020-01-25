@@ -16,6 +16,6 @@ su - hadoop -c '/home/hadoop/sbin/start-all.sh'
 if [[ $1 == "-d" ]]; then
     tail -f /home/hadoop/logs/*
     # while true; do sleep 1000; done
-else
-    /bin/bash
 fi
+
+exec "$@"
