@@ -12,4 +12,4 @@ RUN curl -s "https://get.sdkman.io" | bash \
     && sdk install java 8.0.242.hs-adpt \
     && sdk install scala 2.12.10 \
     && sdk install spark 2.4.4 \
-    && ln -s /root/.sdkman/candidates/spark/current spark
+    && ln -s /root/.sdkman/candidates/spark/current /opt/spark
