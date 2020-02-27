@@ -1,0 +1,22 @@
+version: "3"
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - 2181:2181
+  kafka:
+    image: "wurstmeister/kafka:${KAFKA_VERSION:-2.12-2.2.1}"
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: "${DOCKER_HOST_IP:?You docker host ip must be specified}"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  es:
+    image: elasticsearch:6.8.3
+    ports: 
+      - 9200:9200
+      - 9300:9300
+    environment: 
+      - discovery.type=single-node
