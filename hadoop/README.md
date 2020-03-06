@@ -1,6 +1,6 @@
 对于平时的练习使用，使用伪分布式是够用了的，做了一个 Docker 镜像，供大家学习使用.
 
-![官网单节点集群搭建教程](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html)
+[官网单节点集群搭建教程](https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html)
 
 ```bash
 docker run -it -p 8088:8088 -p 9870:9870  5200710/hadoop:3.2.1-preudo
