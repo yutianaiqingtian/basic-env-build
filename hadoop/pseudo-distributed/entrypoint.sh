@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-#!/bin/bash
-
 # Set some sensible defaults
 export CORE_CONF_fs_defaultFS=${CORE_CONF_fs_defaultFS:-hdfs://`hostname -f`:8020}
 
@@ -46,8 +44,8 @@ addProperty /etc/hadoop/yarn-site.xml yarn.nodemanager.env-whitelist JAVA_HOME,H
 # start yarn
 su - hadoop -c "${HADOOP_HOME}/sbin/start-yarn.sh"
 
-if [[ $1 -eq '-d' ]]; then
-  tail -f ${HADOOP_HOME}/logs/*
+if [[ $1 == '-d' ]]; then
+  tail -f ${HADOOP_HOME}/logs/*.log
 fi
 
 exec $@
