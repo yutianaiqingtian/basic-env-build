@@ -32,16 +32,17 @@ RUN ln -s /opt/hadoop-$HADOOP_VERSION /opt/hadoop \
 COPY etc/hadoop/* /etc/hadoop/
 RUN sed -i "s~#\ export\ JAVA_HOME=~export\ JAVA_HOME=$JAVA_HOME~g" /etc/hadoop/hadoop-env.sh
 
-RUN mkdir ${HADOOP_HOME}/logs \
-    && mkdir ${HADOOP_HOME}/data \
-    && chown -R hadoop:hadoop ${HADOOP_HOME}/
-
-RUN su - hadoop -c 'ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa' 
-RUN su - hadoop -c 'cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys' 
-RUN su - hadoop -c 'chmod 0600 ~/.ssh/authorized_keys' 
-RUN su - hadoop -c "${HADOOP_HOME}/bin/hdfs namenode -format"
-
 WORKDIR ${HADOOP_HOME}
+
+RUN mkdir ./logs && mkdir ./data && chown -R hadoop:hadoop ./
+
+USER hadoop
+RUN ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa \
+    && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
+    && chmod 0600 ~/.ssh/authorized_keys \
+    && bin/hdfs namenode -format
+
+USER root
 
 COPY entrypoint.sh /entrypoint.sh
 

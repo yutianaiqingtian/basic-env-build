@@ -2,7 +2,6 @@ version: "3"
 services:
   hadoop:
     image: 5200710/hadoop:3.2.1-pseudo
-    hostname: hadoop
     ports:
       - 9870:9870
       - 8088:8088
