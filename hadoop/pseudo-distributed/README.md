@@ -3,11 +3,31 @@
 直接启动：
 
 ```bash
-docker run -it -p 8088:8088 -p 9870:9870  5200710/hadoop:3.2.1-preudo
+docker run -it -p 8088:8088 -p 9870:9870 -d 5200710/hadoop:3.2.1-pseudo
 ```
+
+进入刚启动的容器
+
+```bash
+docker exec -it `docker ps -l -q` bash
+```
+
+容器内通过 `jps` 来查看Java进程运行状态。(注：首次启动比较耗时，并不一定能够立马看到所有hadoop进程)
+
+```bash
+root@530d73ef475f:/# jps
+272 NameNode
+1794 Jps
+1282 NodeManager
+409 DataNode
+681 SecondaryNameNode
+1131 ResourceManager
+```
+
+正常启动后，可以在宿主主机上访问如下界面：
 
 1. 启动后的NameNode Web 界面 [http://localhost:8088](http://localhost:8088)
 2. 启动后的ResourceManager Web 界面 [http://localhost:9870](http://localhost:9870)
 
-对于完全分布式，有一个很好地 Repository，可以参考 [https://github.com/big-data-europe/docker-hadoop](https://github.com/big-data-europe/docker-hadoop)
+如果想基于Docker启动一个完全分布式hadoop集群，有一个很好地 Repository，可以参考 [https://github.com/big-data-europe/docker-hadoop](https://github.com/big-data-europe/docker-hadoop)
 
