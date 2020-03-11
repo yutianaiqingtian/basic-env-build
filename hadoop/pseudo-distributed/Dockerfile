@@ -2,7 +2,7 @@ FROM 5200710/ubuntu:18.04-163
 
 ARG HADOOP_VERSION=3.2.1
 
-ENV HADOOP_HOME /opt/hadoop-$HADOOP_VERSION
+ENV HADOOP_HOME /opt/hadoop
 ENV HADOOP_CONF_DIR /etc/hadoop
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH $HADOOP_HOME/bin/:$JAVA_HOME/bin/:$PATH
@@ -26,7 +26,22 @@ RUN curl -L -S \
 # RUN tar -xzf /tmp/hadoop-${HADOOP_VERSION}.tar.gz -C /opt/ \
 #     && rm -rf /tmp/hadoop-${HADOOP_VERSION}.tar.gz
 
-RUN ln -s /opt/hadoop-$HADOOP_VERSION/etc/hadoop /etc/hadoop
+RUN ln -s /opt/hadoop-$HADOOP_VERSION /opt/hadoop \
+    && ln -s /opt/hadoop-$HADOOP_VERSION/etc/hadoop /etc/hadoop
+
+COPY etc/hadoop/* /etc/hadoop/
+RUN sed -i "s~#\ export\ JAVA_HOME=~export\ JAVA_HOME=$JAVA_HOME~g" /etc/hadoop/hadoop-env.sh
+
+RUN mkdir ${HADOOP_HOME}/logs \
+    && mkdir ${HADOOP_HOME}/data \
+    && chown -R hadoop:hadoop ${HADOOP_HOME}/
+
+RUN su - hadoop -c 'ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa' 
+RUN su - hadoop -c 'cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys' 
+RUN su - hadoop -c 'chmod 0600 ~/.ssh/authorized_keys' 
+RUN su - hadoop -c "${HADOOP_HOME}/bin/hdfs namenode -format"
+
+WORKDIR ${HADOOP_HOME}
 
 COPY entrypoint.sh /entrypoint.sh
 
