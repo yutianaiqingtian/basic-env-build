@@ -1,4 +1,4 @@
-FROM 5200710/data:spark-2.4.4-local
+FROM 5200710/spark:2.4.4-local
 
 RUN softwares='openssh-server openssh-client' \
     && apt-get update && apt-get install -y $softwares \
