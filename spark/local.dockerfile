@@ -1,15 +1,17 @@
 FROM ubuntu:18.04
 
+ENV SPARK_VERSION=2.4.4
+ENV JAVA_VERSION=8.0.252-open
+ENV SCALA_VERSION=2.12.10
 RUN softwares='curl zip unzip' \
     && apt-get update && apt-get install -y $softwares \
     && rm -rf /var/lib/apt/lists/* 
 
-SHELL ["/bin/bash", "-c"]
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 # install sdkman tools kits and spark
 RUN curl -s "https://get.sdkman.io" | bash \
     && source "/root/.sdkman/bin/sdkman-init.sh" \
-    && rm -rf /root/.sdkman/tmp/* \
-    && sdk install java 8.0.242.hs-adpt \
-    && sdk install scala 2.12.10 \
-    && sdk install spark 2.4.4 \
-    && ln -s /root/.sdkman/candidates/spark/current /opt/spark
+    && sdk install java ${JAVA_VERSION} \
+    && sdk install scala ${SCALA_VERSION} \
+    && sdk install spark ${SPARK_VERSION} \
+    && rm -rf $SDKMAN_DIR/archives/* $SDKMAN_DIR/tmp/*
