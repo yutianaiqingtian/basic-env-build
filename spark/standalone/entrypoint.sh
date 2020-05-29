@@ -5,7 +5,11 @@ set -e
 
 # Install custom python package if requirements.txt is present
 if [ -e "/requirements.txt" ]; then
-    pip3 install --user -r /requirements.txt
+    ${command -v pip3} install --user -r /requirements.txt
+fi
+
+if [ -e ${command -v python} ]; then
+    ln -s ${command -v python3} /usr/bin/python
 fi
 
 [ -z $JAVA_HOME ] && JAVA_HOME='/root/.sdkman/candidates/java/current'
