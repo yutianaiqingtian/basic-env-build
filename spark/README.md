@@ -25,4 +25,25 @@ ln -s /root/.sdkman/candidates/spark/current spark
 docker run -it  --rm -p 8080:8080 -p 8081:8081 5200710/spark:2.4.4-standalone
 ```
 
+## 集群模式
+
+下载 Cluster目录下docker-compose.yml 文件，根据需求扩展spark-worker节点
+
+```bash
+docker-compose up --scale spark-worker=3
+```
+
+其中 spark-master 节点支持启动ssh服务，通过自定义生成密钥对可以实现无密码远程访问spark-master节点。
+
+```
+/etc/ssh/ssh_host_rsa_key
+/etc/ssh/ssh_host_rsa_key.pub
+```
+
 在Github 也找到一个很好地非常好的 Docker 镜像。感兴趣的点击链接获取更多详细信息[docker-spark-cluster/Dockerfile](https://github.com/mvillarrealb/docker-spark-cluster/blob/master/README.md)。
+
+## Reference
+
+1. [big-data-europe/docker-spark: Apache Spark docker image](https://github.com/big-data-europe/docker-spark)
+2. [Creating a Spark Standalone Cluster with Docker and docker-compose](https://medium.com/@marcovillarreal_40011/creating-a-spark-standalone-cluster-with-docker-and-docker-compose-ba9d743a157f)
+3. [mvillarrealb/docker-spark-cluster: A simple spark standalone cluster for your testing environment purposses](https://github.com/mvillarrealb/docker-spark-cluster)
