@@ -17,13 +17,19 @@ ln -s /root/.sdkman/candidates/spark/current spark
 不想过度复杂部署，在spark 的 Local 镜像上，在一个docker容器内，部署了一个Master节点和一个Slave节点。
 
 - Master节点的默认Web UI 端口为 8080
+- Master通信节点默认的端口为 7077
 - Slave节点的默认Web Ui 端口为 8081
 
 容器启动命令如下:
 
 ```
-docker run -it  --rm -p 8080:8080 -p 8081:8081 5200710/spark:2.4.4-standalone
+docker run --rm -it -e ROOT_PASSWORD='admin' 5200710/spark:spark-standalone-2.4.5 bash
 ```
+
+说明：
+
+1. 'ROOT_PASSWORD=admin' 表明是否启用root账户的ssh密码登录方式（默认是支持publishkey的连接）
+2. 可以通过挂载 '/root/.ssh/id_rsa' 和 '/root/.ssh/id_rsa.pub'的方式，使容器使用自己提供的PublishKey和PrivateKey
 
 ## 集群模式
 

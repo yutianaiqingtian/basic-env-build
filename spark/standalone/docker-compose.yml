@@ -7,6 +7,4 @@ services:
       - "8081:8081"
       - "7077:7077"
     environment:
-      # - "START_SSH_SERVICE=true"
-    volumes:
-      # - ./id_rsa.pub:/root/.ssh/authorized_keys
+      - "ROOT_PASSWORD=admin"

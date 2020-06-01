@@ -4,7 +4,11 @@ ENV SPARK_MASTER_PORT 7077
 ENV SPARK_MASTER_WEBUI_PORT 8080
 ENV SPARK_WORKER_WEBUI_PORT 8081
 
-RUN apk --no-cache add procps coreutils
+RUN apk --no-cache add procps coreutils openssh
+
+RUN mkdir -p /root/.ssh && \
+    chmod 700 /root/.ssh/ && \
+    ssh-keygen -A
 
 EXPOSE 8080 7077 6066
 
