@@ -12,13 +12,15 @@ echo "print ${START_SSH_SERVICE}"
 # check if need to start ssh service
 if [[ ${START_SSH_SERVICE} == "true" ]]; then
     # if ssh command not exist, then install sshd and depenency
-    # command -v ssh || apk add --no-cache openrc openssh && rc-update add sshd
     command -v ssh || apk add --no-cache openssh
-    [ ! -e /etc/ssh/ssh_host_rsa_key ] && ssh-keygen -t rsa -P "" -f /etc/ssh/ssh_host_rsa_key
-    [ ! -e /etc/ssh/ssh_host_ed25519_key ] && ssh-keygen -t ed25519 -P "" -f /etc/ssh/ssh_host_ed25519_key
-    [ ! -e /etc/ssh/ssh_host_ecdsa_key ] && ssh-keygen -t rsa -P "" -f /etc/ssh/ssh_host_ecdsa_key
-    # touch /run/openrc/softlevel && /etc/init.d/sshd restart
-    # service sshd restart
+    sed -i "s/#PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
+    sed -i "s/#PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+    mkdir -p /root/.ssh && chmod 700 /root/.ssh/
+    ssh-keygen -A
+    echo "root:${USER_PASSWORD:=admin}" | chpasswd
+    # generate the publishkey and privatekey for passwordless login
+    [ ! -e ~/.ssh/id_rsa ] && ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+    cat ~/.ssh/id_rsa.pub >~/.ssh/authorized_keys
     /usr/sbin/sshd -D &
 fi
 
