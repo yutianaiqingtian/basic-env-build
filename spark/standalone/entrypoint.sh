@@ -6,13 +6,9 @@ set -e
 # Install custom python package if requirements.txt is present
 [ -e "/requirements.txt" ] && ${command-v pip3} install --user -r /requirements.txt
 
-# check if support login with password
-if [ ${ROOT_PASSWORD} ]; then
-    sed -i "s/#PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
-    sed -i "s/#PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
-    echo "root:${ROOT_PASSWORD}" | chpasswd
-fi
-
+# you can login with publishkey if don't change the password(confuse)
+echo "root:${ROOT_PASSWORD:=admin}" | chpasswd
+sed -i "s/#PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
 # generate the publishkey and privatekey for passwordless login
 [ ! -e ~/.ssh/id_rsa ] && ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 cat ~/.ssh/id_rsa.pub >~/.ssh/authorized_keys

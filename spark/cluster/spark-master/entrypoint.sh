@@ -13,11 +13,10 @@ echo "print ${START_SSH_SERVICE}"
 if [[ ${START_SSH_SERVICE} == "true" ]]; then
     # if ssh command not exist, then install sshd and depenency
     command -v ssh || apk add --no-cache openssh
-    sed -i "s/#PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
     sed -i "s/#PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
     mkdir -p /root/.ssh && chmod 700 /root/.ssh/
     ssh-keygen -A
-    echo "root:${USER_PASSWORD:=admin}" | chpasswd
+    echo "root:${ROOT_PASSWORD:=admin}" | chpasswd
     # generate the publishkey and privatekey for passwordless login
     [ ! -e ~/.ssh/id_rsa ] && ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
     cat ~/.ssh/id_rsa.pub >~/.ssh/authorized_keys
